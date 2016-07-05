@@ -1,0 +1,28 @@
+{
+  "name": "growjs",
+  "version": "0.0.1",
+  "description": "Grow various angular seeds",
+  "main": "grow.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jdmichaud/growjs.git"
+  },
+  "keywords": [
+    "angular"
+  ],
+  "author": "jdmichaud",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jdmichaud/growjs/issues"
+  },
+  "homepage": "https://github.com/jdmichaud/growjs#readme",
+  "devDependencies": {
+    "babel-polyfill": "~6.7.4",
+    "eslint": "^3.0.1",
+    "eslint-config-airbnb": "~3.1.0",
+    "eslint-plugin-react": "^5.0.1"
+  }
+}
