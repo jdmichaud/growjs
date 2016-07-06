@@ -1,7 +1,7 @@
 define(function () {
   'use strict';
 
-  describe('%{nameCap}Directive', function () {
+  describe('%{nameCap}Service', function () {
     var $compile;
     var $rootScope;
     var $httpBackend;
@@ -23,21 +23,13 @@ define(function () {
     // TODO: Remove this line if no template needed
     beforeEach(module('templates/someTemplate.html'));
     // Retrieve necessary object
-    beforeEach(inject(function (_$compile_, _$rootScope_, _$httpBackend_) {
-      $compile = _$compile_;
+    beforeEach(inject(function (_$rootScope_, _$httpBackend_) {
       $rootScope = _$rootScope_;
       $httpBackend = _$httpBackend_;
     }));
+
     it('shall do something', function () {
-      // Compile a piece of HTML containing the directive
-      var template = '<%{name}></%{name}>';
-      var element = $compile(template)($rootScope);
-      // Evaluate the angular expression in the view
-      $rootScope.$digest();
-      // Check that the compiled element contains the templated content
       // TODO: describe here appropriate expectations
-      var div = element.find('div');
-      expect(div.length).toBeGreaterThan(1);
     });
   });
 });

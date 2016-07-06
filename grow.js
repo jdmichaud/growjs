@@ -1,4 +1,6 @@
 /* eslint no-loop-func: 0 */
+/* eslint global-require: 0 */
+/* eslint import/no-unresolved: 0 */
 'use strict';
 
 var fs = require('fs');
@@ -17,8 +19,32 @@ var gTemplate = {
         filename: 'app/js/directives/%{name}/%{name}.directive.less',
       },
       {
-        filename: 'test/unit/directives/%{name}/%{name}.directive.spec.js',
+        filename: 'test/unit/directives/%{name}.directive.spec.js',
         content: 'template.directive.spec.js',
+      },
+    ],
+  },
+  service: {
+    files: [
+      {
+        filename: 'app/js/services/%{name}.service.js',
+        content: 'template.service.js',
+      },
+      {
+        filename: 'test/unit/services/%{name}.service.spec.js',
+        content: 'template.service.spec.js',
+      },
+    ],
+  },
+  controller: {
+    files: [
+      {
+        filename: 'app/js/controllers/%{name}.controller.js',
+        content: 'template.controller.js',
+      },
+      {
+        filename: 'test/unit/controllers/%{name}.controller.js',
+        content: 'template.controller.spec.js',
       },
     ],
   },
@@ -32,9 +58,9 @@ function usage() {
 function makePath(path) {
   const pathArray = path.split('/');
   var growingPath = '';
-  for (let folder of pathArray.slice(0, -1)) {
-    growingPath += '/' + folder;
-    if (!fs.existsSync(growingPath)){
+  for (const folder of pathArray.slice(0, -1)) {
+    growingPath = `${growingPath}/${folder}`;
+    if (!fs.existsSync(growingPath)) {
       console.log('create folder', growingPath);
       fs.mkdirSync(growingPath);
     }
@@ -42,20 +68,34 @@ function makePath(path) {
 }
 
 function camelcize(id) {
-  let elements = id.split('-');
-  return elements[0] + (elements.slice(1).map((item) => {
-    return item.charAt(0).toUpperCase() + item.slice(1);
-  })).join('');
+  const elements = id.split('-');
+  return elements[0] + (elements.slice(1).map((item) =>
+    item.charAt(0).toUpperCase() + item.slice(1)
+  )).join('');
+}
+
+function getPackageInfo(frontendPath) {
+  let pjson;
+  try {
+    pjson = require(`${frontendPath}/package.json`);
+  } catch (exception) {
+    console.log(`warning: error loading ${frontendPath}/package.json:`, exception);
+    console.log('warning: %{application} will be replaced by empty strings.');
+    return { name: '' };
+  }
+  return pjson;
 }
 
 function createContent(template, type, name, frontendPath) {
+  const application = getPackageInfo(frontendPath).name;
   for (const file of template[type].files) {
-    const filepath = frontendPath + '/' + file.filename.replace(/%{name}/g, name);
+    const filepath = `${frontendPath}/${file.filename.replace(/%{name}/g, name)}`;
     makePath(filepath);
     if (file.hasOwnProperty('content')) {
       const content = fs.readFileSync(file.content, { encoding: 'utf-8' })
         .replace(/%{name}/g, name)
-        .replace(/%{nameCap}/g, camelcize(name));
+        .replace(/%{nameCap}/g, camelcize(name))
+        .replace(/%{application}/g, application);
       var fd = fs.writeFile(filepath, content, (err) => {
         if (err) throw err;
         console.log(filepath, 'created');
