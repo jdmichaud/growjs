@@ -2,7 +2,7 @@
 
 Grow various angular seed.
 
-# Lets' grow
+# Let's grow
 
 To grow a directive:
 ```
