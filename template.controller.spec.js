@@ -1,4 +1,4 @@
-define(function () {
+require([], function () {
   'use strict';
 
   describe('%{nameCap}Controller', function () {
